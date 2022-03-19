@@ -2,7 +2,7 @@ Hooks:PostHook(CharacterTweakData, "init", "fixmod_init", function(self)
 	self.gensec.suppression = self.presets.suppression.easy -- weak enemy, so only easy suppression
 
 	self.medic.suppression = nil -- no suppression
-	
+
 	self.tank.ecm_vulnerability = 0 -- bugs out if they get affected by it
 
 	-- prevent phalanx from meleeing, since it's just buggy

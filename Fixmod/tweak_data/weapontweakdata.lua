@@ -1,18 +1,14 @@
-Hooks:PostHook(WeaponTweakData, "_set_sm_wish", "fixmod_set_sm_wish", function(self)
-	self.benelli_npc.DAMAGE = 7 -- scale the benelli to the same as the r870
-end)
-
 Hooks:PostHook(WeaponTweakData, "init", "fixmod_init", function(self)
-    self.beretta92_npc.has_suppressor = "suppressed_b" -- suppressed
+	self.beretta92_npc.has_suppressor = "suppressed_b" -- suppressed
 
 	self.ak47_ass_npc.sounds.prefix = "akm_npc" -- actually use ak sounds
 	self.ak47_ass_npc.muzzleflash = "effects/payday2/particles/weapons/762_auto" -- proper muzzleflash
 
 	self.m14_npc.FIRE_MODE = "auto" -- not set right
 
-    self.benelli_npc.sounds.prefix = "benelli_m4_npc" -- actually use benelli sounds
+	self.benelli_npc.sounds.prefix = "benelli_m4_npc" -- actually use benelli sounds
 
-    self.mac11_npc.sounds.prefix = "mac10_npc" -- actually use mac11 sounds
+	self.mac11_npc.sounds.prefix = "mac10_npc" -- actually use mac11 sounds
 
 	-- what it should've been in early PD2 lua
 	self.mossberg_npc.sounds.prefix = "huntsman_npc"

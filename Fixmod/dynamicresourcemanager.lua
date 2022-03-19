@@ -1,14 +1,17 @@
 local overrides = {
-	["units/payday2/weapons/wpn_npc_s552/wpn_npc_s552"] = "unit",
-	["units/payday2/weapons/wpn_npc_sawnoff_shotgun/wpn_npc_sawnoff_shotgun"] = "unit",
-	["units/payday2/weapons/wpn_npc_ump/wpn_npc_ump"] = "unit",
+	["units/payday2/characters/ene_fbi_3/ene_fbi_3"] = "unit", -- wrong tweak_table
+	["units/payday2/characters/ene_fbi_3/ene_fbi_3_husk"] = "unit", -- wrong tweak_table
 
-	["units/pd2_dlc_mad/characters/ene_akan_cs_cop_asval_smg/ene_akan_cs_cop_asval_smg"] = "unit",
-	["units/pd2_dlc_mad/characters/ene_akan_cs_cop_asval_smg/ene_akan_cs_cop_asval_smg_husk"] = "unit",
+	["units/payday2/weapons/wpn_npc_s552/wpn_npc_s552"] = "unit", -- wrong soundbank
+	["units/payday2/weapons/wpn_npc_sawnoff_shotgun/wpn_npc_sawnoff_shotgun"] = "unit", -- wrong soundbank
+	["units/payday2/weapons/wpn_npc_ump/wpn_npc_ump"] = "unit", -- wrong soundbank
 
-	["units/pd2_dlc_mad/weapons/wpn_npc_akmsu/wpn_npc_akmsu"] = "unit",
-	["units/pd2_dlc_mad/weapons/wpn_npc_asval/wpn_npc_asval"] = "unit",
-	["units/pd2_dlc_mad/weapons/wpn_npc_rpk/wpn_npc_rpk"] = "unit",
+	["units/pd2_dlc_mad/characters/ene_akan_cs_cop_asval_smg/ene_akan_cs_cop_asval_smg"] = "unit", -- wrong weapon
+	["units/pd2_dlc_mad/characters/ene_akan_cs_cop_asval_smg/ene_akan_cs_cop_asval_smg_husk"] = "unit", -- wrong weapon
+
+	["units/pd2_dlc_mad/weapons/wpn_npc_akmsu/wpn_npc_akmsu"] = "unit", -- wrong soundbank
+	["units/pd2_dlc_mad/weapons/wpn_npc_asval/wpn_npc_asval"] = "unit", -- wrong soundbank
+	["units/pd2_dlc_mad/weapons/wpn_npc_rpk/wpn_npc_rpk"] = "unit", -- wrong soundbank
 }
 
 Hooks:PostHook(DynamicResourceManager, "preload_units", "fixmod_preload_units", function(self)

@@ -12,6 +12,7 @@
 		{ "hook_id" : "lib/tweak_data/charactertweakdata", "script_path" : "tweak_data/charactertweakdata.lua" }
 		{ "hook_id" : "lib/tweak_data/weapontweakdata", "script_path" : "tweak_data/weapontweakdata.lua" },
 		{ "hook_id" : "lib/units/beings/player/playersound", "script_path": "playersound.lua" },
+		{ "hook_id" : "lib/units/equipment/sentry_gun/sentrygundamage", "script_path": "sentrygundamage.lua" },
 		{ "hook_id" : "lib/units/interactions/interactionext", "script_path": "interactionext.lua" },
 		{ "hook_id" : "lib/units/player_team/teamaidamage", "script_path" : "teamaidamage.lua" },
 		{ "hook_id" : "lib/units/weapons/npcraycastweaponbase", "script_path" : "npcraycastweaponbase.lua" },

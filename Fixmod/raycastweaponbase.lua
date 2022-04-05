@@ -15,9 +15,20 @@ end
 
 function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage, blank, no_sound)
 	local hit_unit = col_ray.unit
+
+	-- MUST be done at the start of the function because you may shoot a destructible body and it'll get respawned into a slotmask the decal effect won't find
+	-- i.e, you shoot a dozer's armour and destroy it, it gets moved into the slotmask for debris and therefore won't be found for the decal impact so you get a blood impact instead
+	-- so the decal effect must be queued before damage is applied
+	if not hit_unit:character_damage() or not hit_unit:character_damage()._no_blood and not hit_unit:character_damage():is_friendly_fire(user_unit) then
+		managers.game_play_central:play_impact_flesh({
+			col_ray = col_ray,
+			no_sound = no_sound
+		})
+		self:play_impact_sound_and_effects(weapon_unit, col_ray, no_sound)
+	end
+
 	local shield_knock = false
 	local is_shield = hit_unit:in_slot(8) and alive(hit_unit:parent())
-
 	if is_shield and not hit_unit:parent():character_damage():is_immune_to_shield_knockback() and weapon_unit then
 		shield_knock = weapon_unit:base()._shield_knock
 		local dmg_ratio = math.min(damage, MIN_KNOCK_BACK)
@@ -44,34 +55,6 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 		end
 	end
 
-	local play_impact_flesh = not hit_unit:character_damage() or not hit_unit:character_damage()._no_blood
-	local result = nil
-	if alive(weapon_unit) and hit_unit:character_damage() and hit_unit:character_damage().damage_bullet then
-		local is_alive = not hit_unit:character_damage():dead()
-		local knock_down = weapon_unit:base()._knock_down and weapon_unit:base()._knock_down > 0 and math.random() < weapon_unit:base()._knock_down
-		result = self:give_impact_damage(col_ray, weapon_unit, user_unit, damage, weapon_unit:base()._use_armor_piercing, false, knock_down, weapon_unit:base()._stagger, weapon_unit:base()._variant)
-
-		if result ~= "friendly_fire" then
-			local is_dead = hit_unit:character_damage():dead()
-			local push_multiplier = self:_get_character_push_multiplier(weapon_unit, is_alive and is_dead)
-
-			managers.game_play_central:physics_push(col_ray, push_multiplier)
-		else
-			play_impact_flesh = false
-		end
-	else
-		managers.game_play_central:physics_push(col_ray)
-	end
-
-	if play_impact_flesh then
-		managers.game_play_central:play_impact_flesh({
-			col_ray = col_ray,
-			no_sound = no_sound
-		})
-		self:play_impact_sound_and_effects(weapon_unit, col_ray, no_sound)
-	end
-
-	-- has to be done last, to fix cases where a body is destroyed and respawned into a slotmask that the decal effect won't find
 	if hit_unit:damage() and managers.network:session() and col_ray.body:extension() and col_ray.body:extension().damage then
 		local sync_damage = not blank and hit_unit:id() ~= -1
 		local network_damage = math.ceil(damage * 163.84)
@@ -85,6 +68,7 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 		end
 
 		local local_damage = not blank or hit_unit:id() == -1
+
 		if local_damage then
 			col_ray.body:extension().damage:damage_bullet(user_unit, col_ray.normal, col_ray.position, col_ray.ray, 1)
 			col_ray.body:extension().damage:damage_damage(user_unit, col_ray.normal, col_ray.position, col_ray.ray, damage)
@@ -95,6 +79,23 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 				end
 			end
 		end
+	end
+
+	local result = nil
+
+	if alive(weapon_unit) and hit_unit:character_damage() and hit_unit:character_damage().damage_bullet then
+		local is_alive = not hit_unit:character_damage():dead()
+		local knock_down = weapon_unit:base()._knock_down and weapon_unit:base()._knock_down > 0 and math.random() < weapon_unit:base()._knock_down
+		result = self:give_impact_damage(col_ray, weapon_unit, user_unit, damage, weapon_unit:base()._use_armor_piercing, false, knock_down, weapon_unit:base()._stagger, weapon_unit:base()._variant)
+
+		if result ~= "friendly_fire" then
+			local is_dead = hit_unit:character_damage():dead()
+			local push_multiplier = self:_get_character_push_multiplier(weapon_unit, is_alive and is_dead)
+
+			managers.game_play_central:physics_push(col_ray, push_multiplier)
+		end
+	else
+		managers.game_play_central:physics_push(col_ray)
 	end
 
 	return result

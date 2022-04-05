@@ -18,7 +18,7 @@ Hooks:PostHook(DynamicResourceManager, "preload_units", "fixmod_preload_units", 
 	for path, extension in pairs(overrides) do
 		local ids_path = Idstring(path)
 		local ids_extension = Idstring(extension)
-		if PackageManager:has(ids_extension, ids_path) then
+		if PackageManager:has(ids_extension, ids_path) then -- if it's not even loaded because it isn't needed, don't bother overriding it
 			BLT.AssetManager:CreateEntry(ids_path, ids_extension, Fixmod.mod_path .. path .. "." .. extension)
 			PackageManager:reload(ids_extension, ids_path)
 			self:load(ids_extension, ids_path, self.DYN_RESOURCES_PACKAGE)

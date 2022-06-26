@@ -91,10 +91,25 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 			local push_multiplier = self:_get_character_push_multiplier(weapon_unit, is_alive and is_dead)
 
 			managers.game_play_central:physics_push(col_ray, push_multiplier)
+
+			if result.type == "death" and weapon_unit:base()._do_shotgun_push then
+				managers.game_play_central:do_shotgun_push(col_ray.unit, col_ray.position, col_ray.ray, col_ray.distance, user_unit)
+			end
 		end
 	else
 		managers.game_play_central:physics_push(col_ray)
 	end
 
 	return result
+end
+
+function InstantBulletBase:on_collision_effects(col_ray, weapon_unit, user_unit, damage, blank, no_sound)
+	local hit_unit = col_ray.unit
+	if not hit_unit:character_damage() or not hit_unit:character_damage()._no_blood and (not hit_unit:character_damage().is_friendly_fire or not hit_unit:character_damage():is_friendly_fire(user_unit)) then
+		managers.game_play_central:play_impact_flesh({
+			col_ray = col_ray,
+			no_sound = no_sound
+		})
+		self:play_impact_sound_and_effects(weapon_unit, col_ray, no_sound)
+	end
 end
